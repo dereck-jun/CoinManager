@@ -41,3 +41,6 @@ out/
 
 ### data ###
 data/
+
+### logs ###
+logs/
