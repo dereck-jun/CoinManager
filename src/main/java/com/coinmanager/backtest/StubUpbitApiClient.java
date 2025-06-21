@@ -13,22 +13,22 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Primary
-@Profile("backtest")
+@Profile("test")
 public class StubUpbitApiClient extends UpbitApiClient {
 
 	public StubUpbitApiClient() {
 		super(null, null);
-	} // 부모 생성자 만족용
+	}
 
 	@Override
 	public List<MarketData> getMarketData(String m, int u, int c, String t) {
-		return List.of();
+		throw new UnsupportedOperationException("백테스트에선 지원하지 않음");
 	}
 
 	@Override
 	public PriceLimitInfo getPriceLimit(String market) {
 		PriceLimitInfo info = new PriceLimitInfo();
-		info.setBidLimit(new BigDecimal("100000000"));
+		info.setBidLimit(new BigDecimal("1000000"));
 		info.setAskLimit(new BigDecimal("100"));
 		return info;
 	}
@@ -40,7 +40,7 @@ public class StubUpbitApiClient extends UpbitApiClient {
 
 	@Override
 	public BigDecimal getTotalAssetKrw() {
-		return new BigDecimal("10000000");
+		return new BigDecimal("1000000");
 	}
 
 	@Override

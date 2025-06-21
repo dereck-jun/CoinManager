@@ -4,17 +4,45 @@ import com.coinmanager.domain.dto.MarketData;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Objects;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class TechIndicatorUtil {
 
-	public BigDecimal sma(List<MarketData> list, int period) {
-		return list.subList(list.size() - period, list.size())
+	public static BigDecimal momentum(List<MarketData> list, int period) {
+		if (list.size() <= period) {
+			return null;
+		}
+		MarketData current = list.get(list.size() - 1);
+		MarketData past = list.get(list.size() - period - 1);
+
+		if (current.getClosePrice() == null || past.getClosePrice() == null) {
+			return null;
+		}
+
+		return current.getClosePrice().divide(
+			past.getClosePrice(), 8, RoundingMode.HALF_UP
+		);
+	}
+
+	public static BigDecimal sma(List<MarketData> list, int period) {
+		if (list.size() < period) {
+			return null;
+		}
+
+		List<BigDecimal> closes = list.subList(list.size() - period, list.size())
 			.stream()
 			.map(MarketData::getClosePrice)
-			.reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(period), 8, RoundingMode.HALF_UP);
+			.filter(Objects::nonNull)
+			.toList();
+
+		if (closes.isEmpty()) {
+			return null;
+		}
+
+		BigDecimal sum = closes.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+		return sum.divide(new BigDecimal(closes.size()), 8, RoundingMode.HALF_UP);
 	}
 
 	/**
@@ -57,7 +85,7 @@ public class TechIndicatorUtil {
 			)
 		);
 
-		BigDecimal upper = ma.add(stdDev.multiply(BigDecimal.valueOf(2)));
+		BigDecimal upper = Objects.requireNonNull(ma).add(stdDev.multiply(BigDecimal.valueOf(2)));
 		BigDecimal lower = ma.subtract(stdDev.multiply(BigDecimal.valueOf(2)));
 
 		return new BigDecimal[]{upper, lower};

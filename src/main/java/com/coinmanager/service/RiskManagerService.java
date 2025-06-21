@@ -7,11 +7,11 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
-@Profile("!backtest")
+@Profile("!test")
 @RequiredArgsConstructor
 public class RiskManagerService {
 
-	private static final BigDecimal DEFAULT_RISK = new BigDecimal("0.02");    // 2%
+	private static final BigDecimal DEFAULT_RISK = new BigDecimal("0.03");    // 2%
 
 	private final AccountService accountService;    // (현금 잔고 + 코인 평가 금액)
 

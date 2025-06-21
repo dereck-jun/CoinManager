@@ -59,7 +59,7 @@ public class BacktestRunner {
 			isSecondCandle(rawCandles) ? toMinuteCandles(rawCandles) : rawCandles;
 
 		// === 초기 상태 ===
-		BigDecimal cash = new BigDecimal("10000000");      // 1천만원
+		BigDecimal cash = new BigDecimal("1000000");
 		BigDecimal coin = BigDecimal.ZERO;
 		BigDecimal equity = cash, startAsset = cash;
 		BigDecimal peak = equity, mdd = BigDecimal.ZERO;

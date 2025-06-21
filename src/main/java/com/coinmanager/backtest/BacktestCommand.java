@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@Profile("backtest")
+@Profile("test")
 @RequiredArgsConstructor
 public class BacktestCommand implements ApplicationRunner {
 
